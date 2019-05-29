@@ -170,6 +170,7 @@ class pyRenamer:
         self.images_renamed_pattern = self.glade_tree.get_widget("images_renamed_pattern")
         self.images_original_pattern_combo = self.glade_tree.get_widget("images_original_pattern_combo")
         self.images_renamed_pattern_combo = self.glade_tree.get_widget("images_renamed_pattern_combo")
+        self.images_correction = self.glade_tree.get_widget("images_correction")
 
         self.music_original_pattern = self.glade_tree.get_widget("music_original_pattern")
         self.music_renamed_pattern = self.glade_tree.get_widget("music_renamed_pattern")
@@ -276,6 +277,7 @@ class pyRenamer:
                     "on_images_dest_edit_clicked": self.on_images_dest_edit_clicked,
                     "on_images_original_pattern_combo_changed": self.on_images_original_pattern_combo_changed,
                     "on_images_renamed_pattern_combo_changed": self.on_images_renamed_pattern_combo_changed,
+                    "on_images_correction_changed": self.on_images_correction_changed,
 
                     "on_music_original_pattern_changed": self.on_music_original_pattern_changed,
                     "on_music_renamed_pattern_changed": self.on_music_renamed_pattern_changed,
@@ -536,8 +538,9 @@ class pyRenamer:
             # Replace images using patterns
             pattern_ini = self.images_original_pattern.get_text()
             pattern_end = self.images_renamed_pattern.get_text()
+            correction = self.images_correction.get_text()
             newname, newpath = renamerfilefuncs.rename_using_patterns(newname, newpath, pattern_ini, pattern_end, self.count)
-            newname, newpath = renamerfilefuncs.replace_images(name, path, newname, newpath)
+            newname, newpath = renamerfilefuncs.replace_images(name, path, newname, newpath, correction)
 
         elif self.notebook.get_current_page() == 5 and (pyrenamerglob.have_hachoir or pyrenamerglob.have_eyed3):
             # Replace music using patterns
@@ -924,6 +927,13 @@ class pyRenamer:
 
 
     def on_images_renamed_pattern_changed(self, widget):
+        """ Disable Rename button (user has to click on Preview again) """
+        self.rename_button.set_sensitive(False)
+        self.menu_rename.set_sensitive(False)
+        if self.autopreview:
+            self.on_preview_button_clicked(None)
+
+    def on_images_correction_changed(self, widget):
         """ Disable Rename button (user has to click on Preview again) """
         self.rename_button.set_sensitive(False)
         self.menu_rename.set_sensitive(False)

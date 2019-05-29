@@ -1281,7 +1281,7 @@ ____ to _
                   <widget class="GtkTable" id="images_table">
                     <property name="visible">True</property>
                     <property name="border_width">12</property>
-                    <property name="n_rows">4</property>
+                    <property name="n_rows">5</property>
                     <property name="n_columns">4</property>
                     <property name="column_spacing">6</property>
                     <property name="row_spacing">6</property>
@@ -1478,8 +1478,8 @@ Random number replacements:
                       </widget>
                       <packing>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
+                        <property name="top_attach">4</property>
+                        <property name="bottom_attach">5</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options"></property>
                       </packing>
@@ -1524,6 +1524,40 @@ Random number replacements:
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label36">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">12</property>
+			<property name="label" translatable="yes">Image time correction in seconds</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="images_correction">
+                         <property name="visible">True</property>
+                         <property name="can_focus">True</property>
+                         <property name="tooltip" translatable="yes">0		no correction
+10		increase by 10 seconds
+120		increase by 2 minutes (= 120 seconds)
+-20		decreade by 20 seconds</property>
+                         <property name="text" translatable="yes">0</property>
+                         <signal name="changed" handler="on_images_correction_changed"/>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>

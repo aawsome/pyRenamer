@@ -25,14 +25,13 @@ import dircache
 import glob
 import re
 import sys
-import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import unicodedata
 
 import pyrenamer_globals
 
-import EXIF
+import exifread
 
 if pyrenamer_globals.have_hachoir:
     from pyrenamer_metadata import PyrenamerMetadataMusic
@@ -403,7 +402,7 @@ def rename_using_patterns(name, path, pattern_ini, pattern_end, count):
     return unicode(newname), unicode(newpath)
 
 
-def replace_images(name, path, newname, newpath):
+def replace_images(name, path, newname, newpath, correction):
     """ Pattern replace for images """
 
     name = unicode(name)
@@ -413,20 +412,26 @@ def replace_images(name, path, newname, newpath):
 
     # Image EXIF replacements
     date, width, height, cameramaker, cameramodel = get_exif_data(get_new_path(name, path))
+  
+    try:
+        delta = timedelta(seconds=float(correction))
+        date = date + delta
+    except:
+        pass
 
     if date != None:
-        newname = newname.replace('{imagedate}', time.strftime("%d%b%Y", date))
-        newname = newname.replace('{imageyear}', time.strftime("%Y", date))
-        newname = newname.replace('{imagemonth}', time.strftime("%m", date))
-        newname = newname.replace('{imagemonthname}', time.strftime("%B", date))
-        newname = newname.replace('{imagemonthsimp}', time.strftime("%b", date))
-        newname = newname.replace('{imageday}', time.strftime("%d", date))
-        newname = newname.replace('{imagedayname}', time.strftime("%A", date))
-        newname = newname.replace('{imagedaysimp}', time.strftime("%a", date))
-        newname = newname.replace('{imagetime}', time.strftime("%H_%M_%S", date))
-        newname = newname.replace('{imagehour}', time.strftime("%H", date))
-        newname = newname.replace('{imageminute}', time.strftime("%M", date))
-        newname = newname.replace('{imagesecond}', time.strftime("%S", date))
+        newname = newname.replace('{imagedate}', datetime.strftime(date, "%d%b%Y"))
+        newname = newname.replace('{imageyear}', datetime.strftime(date, "%Y"))
+        newname = newname.replace('{imagemonth}', datetime.strftime(date, "%m"))
+        newname = newname.replace('{imagemonthname}', datetime.strftime(date, "%B"))
+        newname = newname.replace('{imagemonthsimp}', datetime.strftime(date, "%b"))
+        newname = newname.replace('{imageday}', datetime.strftime(date, "%d"))
+        newname = newname.replace('{imagedayname}', datetime.strftime(date, "%A"))
+        newname = newname.replace('{imagedaysimp}', datetime.strftime(date, "%a"))
+        newname = newname.replace('{imagetime}', datetime.strftime(date, "%H_%M_%S"))
+        newname = newname.replace('{imagehour}', datetime.strftime(date, "%H"))
+        newname = newname.replace('{imageminute}', datetime.strftime(date, "%M"))
+        newname = newname.replace('{imagesecond}', datetime.strftime(date, "%S"))
     else:
         newname = newname.replace('{imagedate}','')
         newname = newname.replace('{imageyear}', '')
@@ -492,7 +497,7 @@ def get_exif_data(path):
         return date, width, height, cameramaker, cameramodel
 
     try:
-        tags = EXIF.process_file(file)
+        tags = exifread.process_file(file)
         if not tags:
             print "ERROR: No EXIF tags on", path
             return date, width, height, cameramaker, cameramodel
@@ -504,7 +509,7 @@ def get_exif_data(path):
     if tags.has_key('EXIF DateTimeOriginal'):
         data = str(tags['EXIF DateTimeOriginal'])
         try:
-            date = time.strptime(data, "%Y:%m:%d %H:%M:%S")
+            date = datetime.strptime(data, "%Y:%m:%d %H:%M:%S")
         except:
             date = None
 
