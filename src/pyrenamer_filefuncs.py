@@ -25,7 +25,7 @@ import dircache
 import glob
 import re
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 import random
 import unicodedata
 
@@ -304,28 +304,28 @@ def rename_using_patterns(name, path, pattern_ini, pattern_end, count):
     newname = newname.replace('{dir}', dir)
 
     # Some date replacements
-    newname = newname.replace('{date}', time.strftime("%d%b%Y", time.localtime()))
-    newname = newname.replace('{year}', time.strftime("%Y", time.localtime()))
-    newname = newname.replace('{month}', time.strftime("%m", time.localtime()))
-    newname = newname.replace('{monthname}', time.strftime("%B", time.localtime()))
-    newname = newname.replace('{monthsimp}', time.strftime("%b", time.localtime()))
-    newname = newname.replace('{day}', time.strftime("%d", time.localtime()))
-    newname = newname.replace('{dayname}', time.strftime("%A", time.localtime()))
-    newname = newname.replace('{daysimp}', time.strftime("%a", time.localtime()))
+    newname = newname.replace('{date}', datetime.strftime(datetime.now(), "%d%b%Y"))
+    newname = newname.replace('{year}', datetime.strftime(datetime.now(), "%Y"))
+    newname = newname.replace('{month}', datetime.strftime(datetime.now(), "%m"))
+    newname = newname.replace('{monthname}', datetime.strftime(datetime.now(), "%B"))
+    newname = newname.replace('{monthsimp}', datetime.strftime(datetime.now(), "%b"))
+    newname = newname.replace('{day}', datetime.strftime(datetime.now(), "%d"))
+    newname = newname.replace('{dayname}', datetime.strftime(datetime.now(), "%A"))
+    newname = newname.replace('{daysimp}', datetime.strftime(datetime.now(), "%a"))
 
     print "This routine is running!"
 
     # Some pattern matches for creation and modification date
     createdate, modifydate = get_filestat_data(get_new_path(name, path))
     if createdate is not None:
-        newname = newname.replace('{createdate}', time.strftime("%d%b%Y", createdate))
-        newname = newname.replace('{createyear}', time.strftime("%Y", createdate))
-        newname = newname.replace('{createmonth}', time.strftime("%m", createdate))
-        newname = newname.replace('{createmonthname}', time.strftime("%B", createdate))
-        newname = newname.replace('{createmonthsimp}', time.strftime("%b", createdate))
-        newname = newname.replace('{createday}', time.strftime("%d", createdate))
-        newname = newname.replace('{createdayname}', time.strftime("%A", createdate))
-        newname = newname.replace('{createdaysimp}', time.strftime("%a", createdate))
+        newname = newname.replace('{createdate}', datetime.strftime(createdate, "%d%b%Y"))
+        newname = newname.replace('{createyear}', datetime.strftime(createdate, "%Y"))
+        newname = newname.replace('{createmonth}', datetime.strftime(createdate, "%m"))
+        newname = newname.replace('{createmonthname}', datetime.strftime(createdate, "%B"))
+        newname = newname.replace('{createmonthsimp}', datetime.strftime(createdate, "%b"))
+        newname = newname.replace('{createday}', datetime.strftime(createdate, "%d"))
+        newname = newname.replace('{createdayname}', datetime.strftime(createdate, "%A"))
+        newname = newname.replace('{createdaysimp}', datetime.strftime(createdate, "%a"))
     else:
         newname = newname.replace('{createdate}', '')
         newname = newname.replace('{createyear}', '')
@@ -337,14 +337,14 @@ def rename_using_patterns(name, path, pattern_ini, pattern_end, count):
         newname = newname.replace('{createdaysimp}', '')
 
     if modifydate is not None:
-        newname = newname.replace('{modifydate}', time.strftime("%d%b%Y", modifydate))
-        newname = newname.replace('{modifyyear}', time.strftime("%Y", modifydate))
-        newname = newname.replace('{modifymonth}', time.strftime("%m", modifydate))
-        newname = newname.replace('{modifymonthname}', time.strftime("%B", modifydate))
-        newname = newname.replace('{modifymonthsimp}', time.strftime("%b", modifydate))
-        newname = newname.replace('{modifyday}', time.strftime("%d", modifydate))
-        newname = newname.replace('{modifydayname}', time.strftime("%A", modifydate))
-        newname = newname.replace('{modifydaysimp}', time.strftime("%a", modifydate))
+        newname = newname.replace('{modifydate}', datetime.strftime(modifydate, "%d%b%Y"))
+        newname = newname.replace('{modifyyear}', datetime.strftime(modifydate, "%Y"))
+        newname = newname.replace('{modifymonth}', datetime.strftime(modifydate, "%m"))
+        newname = newname.replace('{modifymonthname}', datetime.strftime(modifydate, "%B"))
+        newname = newname.replace('{modifymonthsimp}', datetime.strftime(modifydate, "%b"))
+        newname = newname.replace('{modifyday}', datetime.strftime(modifydate, "%d"))
+        newname = newname.replace('{modifydayname}', datetime.strftime(modifydate, "%A"))
+        newname = newname.replace('{modifydaysimp}', datetime.strftime(modifydate, "%a"))
     else:
         newname = newname.replace('{modifydate}', '')
         newname = newname.replace('{modifyyear}', '')
